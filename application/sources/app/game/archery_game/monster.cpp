@@ -2,7 +2,7 @@
 #include "bullet.h"
 #include "bang.h"
 #include "game_border.h"
-#include "scr_archery_game.h"
+#include "scr_gun_game.h"
 
 ar_game_meteoroid_t meteoroid[NUM_METEOROIDS + NUM_METEOROIDS_III + GIFT + BOSS];
 uint8_t gift_hit_count = 0;

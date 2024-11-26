@@ -9,7 +9,7 @@
 
 #include "task_list.h"
 
-#include "scr_archery_game.h"
+#include "scr_gun_game.h"
 
 button_t btn_mode;
 button_t btn_up;

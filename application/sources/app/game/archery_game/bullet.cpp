@@ -1,7 +1,7 @@
 #include "bullet.h"
 
 #include "game_gun.h"
-#include "scr_archery_game.h"
+#include "scr_gun_game.h"
 
 ar_game_arrow_t arrow[MAX_NUM_ARROW];
 

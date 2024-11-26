@@ -13,7 +13,7 @@
 #include "task_list.h"
 #include "task_display.h"
 
-#include "scr_archery_game.h"
+#include "scr_gun_game.h"
 
 #define NUM_BANG                 (10)
 #define SIZE_BITMAP_BANG_I_X     (10)

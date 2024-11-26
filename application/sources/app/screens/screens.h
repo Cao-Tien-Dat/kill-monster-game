@@ -1,7 +1,7 @@
 #ifndef __SCREENS_H__
 #define __SCREENS_H__
 
-#include "scr_archery_game.h"
+#include "scr_gun_game.h"
 #include "scr_charts_game.h"
 #include "scr_game_over.h"
 #include "scr_game_setting.h"

@@ -13,7 +13,7 @@
 #include "task_display.h"
 
 #include "buzzer.h"
-#include "scr_archery_game.h"
+#include "scr_gun_game.h"
 
 #define MAX_NUM_ARROW       (10)
 #define MAX_AXIS_X_ARROW    (120)

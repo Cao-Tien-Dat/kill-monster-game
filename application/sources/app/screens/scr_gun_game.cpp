@@ -1,4 +1,4 @@
-#include "scr_archery_game.h"
+#include "scr_gun_game.h"
 
 #include "screens.h"
 

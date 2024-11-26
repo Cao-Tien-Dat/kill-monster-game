@@ -14,7 +14,7 @@
 #include "task_display.h"
 
 #include "buzzer.h"
-#include "scr_archery_game.h"
+#include "scr_gun_game.h"
 
 #define AXIS_X_BORDER           (25)
 #define AXIS_Y_BORDER_ON        (2)

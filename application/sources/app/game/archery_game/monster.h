@@ -15,7 +15,7 @@
 #include "task_display.h"
 
 #include "buzzer.h"
-#include "scr_archery_game.h"
+#include "scr_gun_game.h"
 
 #define NUM_METEOROIDS              (4)
 #define NUM_METEOROIDS_III          (3)
