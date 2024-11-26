@@ -1,1 +1,1 @@
-include sources/app/game/archery_game/Makefile.mk
+include sources/app/game/gun/Makefile.mk
