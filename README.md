@@ -1,5 +1,3 @@
-# Kill Monster Game - Build on AK Embedded Base Kit
-
 ## I. Giới thiệu
 
 Kill monster game là một tựa game chạy trên AK Embedded Base Kit. Được xây dựng nhằm mục đích giúp ta có thể tìm hiểu và thực hành về lập trình event – driven. Trong quá trình xây dựng nên gun game, ta sẽ hiểu thêm về cách thiết kế và ứng dụng UML, Task, Signal, Timer, Message, State-machine, …
@@ -18,7 +16,7 @@ KIT cũng tích hợp **RS485**, **NRF24L01+**, và **Flash** lên đến 32MB, 
 Phần mô tả sau đây về **“Kill monster game”**, giải thích cách chơi và cơ chế xử lý của trò chơi.
 
 <p align="center"><img src="https://github.com/user-attachments/assets/4bb837f7-7427-4a96-b94c-8a4590cad417" alt="MENU TRÒ CHƠI"></p>
-<p align="center"><strong><em>Hình 2:</em></strong> MENU TRÒ CHƠI.</p>
+<p align="center"><strong><em>Hình 2:</em></strong> Menu game.</p>
 
 Trò chơi bắt đầu bằng màn hình **Menu game** với các lựa chọn sau: 
 - **Kill Monster Game:** Chọn vào để bắt đầu chơi game.
@@ -27,7 +25,7 @@ Trò chơi bắt đầu bằng màn hình **Menu game** với các lựa chọn 
 - **Exit:** Thoát menu vào màn hình chờ.
 
 <p align="center"><img src="https://github.com/user-attachments/assets/d2625c61-7c25-4f12-b9c1-14cd66517b6e" alt="MÀN HÌNH GAME"></p>
-<p align="center"><strong><em>Hình 3:</em></strong> MÀN HÌNH GAME.</p>
+<p align="center"><strong><em>Hình 3:</em></strong>Màn hình game.</p>
 
 #### 1.2.1 Các đối tượng (Object) trong game.
 |Đối tượng|Tên đối tượng|Mô tả|
@@ -50,13 +48,16 @@ Mục tiêu trò chơi là kiếm được càng nhiều điểm càng tốt, tr
 
 #### 1.2.3 Cơ chế hoạt động.
 - **Cách tính điểm:** Điểm được tính bằng số lượng Monster bị phá hủy. Mỗi Monster bị tiêu diệt tương ứng với 10 điểm. Số điểm tích lũy được sẽ hiển thị ở góc dưới bên phải màn hình.
-- **Độ khó:** Mỗi khi tích lũy được 100 điểm, tốc độ bay của Monster sẽ tăng lên một cấp độ. Đồng thời lượng đạn cần bắn để tiêu diệt chúng cũng tăng lên. Độ khó ban đầu có thể cài đặt trong phần **Setting**.
+
+- **Độ khó:** Mỗi khi tích lũy được 100 điểm, tốc độ bay của Monster sẽ tăng lên một cấp độ. Đồng thời, xuất hiện thêm các Monster mới với lượng đạn cần bắn để tiêu diệt chúng là 2 viên. Độ khó ban đầu có thể cài đặt trong phần **Setting**.
 
 - **Giới hạn của Bullet:** Khi bắn thì số lượng Bullet hiện có sẽ giảm đi tương ứng số lượng Bullet đang bay, nếu Bullet hiện có giảm về "0" thì không thể bắn được và sẽ có âm thanh báo. Số lượng Bullet hiện có sẽ được hồi lại khi tiêu diệt được Monster hoặc Bullet bay hết màn hình game. Số lượng Bullet được hiển thị ở góc dưới bên trái màn hình và có thể thay đổi trong phần **Setting**.
 
 - **Vật phẩm quà:** Để giúp người chơi tiêu diệt Monster nhanh hơn, vật phẩm quà giúp người chơi tiêu diệt Monster dang tiến lại gần Border.
 
-- **Kết thúc trò chơi:** Khi Monster chạm vào Border, trò chơi sẽ kết thúc. Các đối tượng sẽ được reset và số điểm sẽ được lưu. Màn hình sẽ hiển thị “Game Over” với 3 lựa chọn là:
+- **Boom:** Để tăng thêm thử thách cho trò chơi, ngoài việc tiêu diệt Monster, người chơi cần cẩn thận tránh bắn trúng Boom. Nếu không may bắn trúng, trò chơi sẽ kết thúc ngay lập tức.
+
+- **Kết thúc trò chơi:** Khi Monster chạm vào Border và khi bán trúng Boom, trò chơi sẽ kết thúc. Các đối tượng sẽ được reset và số điểm sẽ được lưu. Màn hình sẽ hiển thị “Game Over” với 3 lựa chọn là:
   - **Restart:** chơi lại.
   - **Charts:** vào xem bảng xếp hạng.
   - **Home:** về lại menu game.
@@ -65,51 +66,51 @@ Mục tiêu trò chơi là kiếm được càng nhiều điểm càng tốt, tr
 
 ## II. Thiết kế - KILL MONSTER GAME.
 **Sơ đồ trình tự** được sử dụng để mô tả trình tự của các Message và luồng tương tác giữa các đối tượng trong một hệ thống.
-<p align="center"><img src="https://github.com/user-attachments/assets/9ebc81aa-83fc-4870-9a18-5586707d37d0" alt="Mô tả hình ảnh"></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/787d7933-8231-4383-9e66-352d5cbce7ee" alt="Mô tả hình ảnh"></p>
 <p align="center"><strong><em>Hình 5:</em></strong> The sequence diagram.</p>
 
 ### Ghi chú:
 **SCREEN_ENTRY:** Cài đặt các thiết lập ban đầu cho đối tượng trong game.
 - **Level setup:** Thiết lập thông số cấp độ cho game.
-- **KM_GAME_GUN_SETUP:** Thiết lập thông số ban đầu cho đối tượng Gun.
-- **KM_GAME_BULLET_SETUP:** Thiết lập thông số ban đầu cho các đối tượng Bullet.
-- **KM_GAME_MONSTER_SETUP:** Thiết lập thông số ban đầu cho các đối tượng Monster.
-- **KM_GAME_BANG_SETUP:** Thiết lập thông số ban đầu cho các đối tượng Bang.
-- **KM_GAME_BORDER_SETUP:** Thiết lập thông số ban đầu cho đối tượng Border.
+- **AR_GAME_ARCHERY_SETUP:** Thiết lập thông số ban đầu cho đối tượng Gun.
+- **AR_GAME_ARROW_SETUP:** Thiết lập thông số ban đầu cho các đối tượng Bullet.
+- **AR_GAME_MONSTER_SETUP:** Thiết lập thông số ban đầu cho các đối tượng Monster.
+- **AR_GAME_BANG_SETUP:** Thiết lập thông số ban đầu cho các đối tượng Bang.
+- **AR_GAME_BORDER_SETUP:** Thiết lập thông số ban đầu cho đối tượng Border.
 - **Setup timer - Time tick:** Khởi tạo Timer - Time tick cho game.
 - **STATE (GAME_ON):** Cập nhật trạng thái game -> GAME_ON
 
 **GAME PLAY:** Quá trình hoạt động của game.
 
 **GAME PLAY - Normal:** Game hoạt động ở trạng thái bình thường.
-- **KM_GAME_TIME_TICK:** Signal do Timer - Time tick gửi đến.
-- **KM_GAME_GUN_UPDATE:** Cập nhật trạng thái Gun.
-- **KM_GAME_BULLET_RUN:** Cập nhật di chuyển của các Bullet theo thời gian.
-- **KM_GAME_MONSTER_RUN:** Cập nhật di chuyển của các Monster theo thời gian.
-- **KM_GAME_MONSTER_DETONATOR:** Kiểm tra các Monster có bị Bullet phá hủy.
-- **KM_GAME_BANG_UPDATE:** Cập nhật hoạt ảnh vụ nổ theo thời gian.
-- **KM_GAME_BORDER_UPDATE:** Kiểm tra số điểm hiện tại để cập nhật tăng độ khó game.
-- **KM_GAME_CHECK_GAME_OVER:** Kiểm tra Monster chạm vào Border. Nếu chạm vào thì gửi Signal - **KM_GAME_RESET** đến **Screen**.
+- **AR_GAME_TIME_TICK:** Signal do Timer - Time tick gửi đến.
+- **AR_GAME_ARCHERY_UPDATE:** Cập nhật trạng thái Gun.
+- **AR_GAME_ARROW_RUN:** Cập nhật di chuyển của các Bullet theo thời gian.
+- **AR_GAME_MONSTER_RUN:** Cập nhật di chuyển của các Monster theo thời gian.
+- **AR_GAME_MONSTER_DETONATOR:** Kiểm tra các Monster có bị Bullet phá hủy.
+- **AR_GAME_BANG_UPDATE:** Cập nhật hoạt ảnh vụ nổ theo thời gian.
+- **AR_GAME_BORDER_UPDATE:** Kiểm tra số điểm hiện tại để cập nhật tăng độ khó game.
+- **AR_GAME_CHECK_GAME_OVER:** Kiểm tra Monster chạm vào Border. Nếu chạm vào thì gửi Signal - **AR_GAME_RESET** đến **Screen**.
 
 **GAME PLAY - Action:** Game hoạt động ở trạng thái có tác động của các nút nhấn.
-- **KM_GAME_GUN_UP:** Player nhấn nút **[Up]** điều khiển Gun di chuyển lên.
-- **KM_GAME_GUN_DOWN:** Player nhấn nút **[Down]** điều khiển Bullet di chuyển xuống.
-- **KM_GAME_BULLET_SHOOT:** Player nhấn nút **[Mode]** điều khiển Gun bắn Bullet ra.
+- **AR_GAME_ARCHERY_UP:** Player nhấn nút **[Up]** điều khiển Gun di chuyển lên.
+- **AR_GAME_ARCHERY_DOWN:** Player nhấn nút **[Down]** điều khiển Bullet di chuyển xuống.
+- **AR_GAME_ARROW_SHOOT:** Player nhấn nút **[Mode]** điều khiển Gun bắn Bullet ra.
 
 **RESET GAME:** Quá trình cài đặt lại các thông số trước khi thoát game.
 - **STATE (GAME_OVER):** Cập nhật trạng thái game -> GAME_OVER.
-- **KM_GAME_RESET:** Signal cài đặt lại game do Border gửi đến.
-- **KM_GAME_GUN_RESET:** Cài đặt lại đối tượng Gun trước khi thoát.
-- **KM_GAME_BULLET_RESET:** Cài đặt lại đối tượng Bullet trước khi thoát.
-- **KM_GAME_MONSTER_RESET:** Cài đặt lại đối tượng Monster trước khi thoát.
-- **KM_GAME_BANG_RESET:** Cài đặt lại đối tượng Bang trước khi thoát.
-- **KM_GAME_BORDER_RESET:** Cài đặt lại đối tượng Border trước khi thoát.
+- **AR_GAME_RESET:** Signal cài đặt lại game do Border gửi đến.
+- **AR_GAME_ARCHERY_RESET:** Cài đặt lại đối tượng Gun trước khi thoát.
+- **AR_GAME_ARROW_RESET:** Cài đặt lại đối tượng Bullet trước khi thoát.
+- **AR_GAME_MONSTER_RESET:** Cài đặt lại đối tượng Monster trước khi thoát.
+- **AR_GAME_BANG_RESET:** Cài đặt lại đối tượng Bang trước khi thoát.
+- **AR_GAME_BORDER_RESET:** Cài đặt lại đối tượng Border trước khi thoát.
 - **Save and reset Score:** Lưu số điểm hiện tại và Cài đặt lại.
 - **Timer remove - Timer tick:** Xóa Timer - Time tick.
 - **Setup timer - Timer exit:** Tạo 1 timer one shot để thoát game. Nhằm tạo ra một khoảng delay cho người chơi có thể nhận thức được là mình đã game over trước khi chuyển sang màn hình thông báo game over.
 
 **EXIT:** Thoát khỏi game và chuyển sang màn hình Game Over.
-- **KM_GAME_EXIT:** Signal do Timer exit gửi đến.
+- **AR_GAME_EXIT:** Signal do Timer exit gửi đến.
 - **STATE (GAME_OFF):** Cập nhật trạng thái game -> GAME_OFF
 - **Change the screen - SCREEN_TRAN(scr_game_over_handle, &scr_game_over):** Chuyển màn hình sang màn hình Game Over.
 
@@ -137,31 +138,31 @@ Ví dụ:
         uint8_t action_image;
         int8_t direction;
         uint8_t hit_count;
-        } km_game_monster_t;
-        extern km_game_monster_t monster[NUM_MONSTER + NUM_MONSTER_III + GIFT + BOSS];
+        } ar_game_monster_t;
+        extern ar_game_monster_t monster[NUM_MONSTER + NUM_MONSTER_III + GIFT + BOSS];
 
 **Áp dụng struct cho các đối tượng:**
 |struct|Các biến|
 |------|--------|
-|km_game_gun_t|gun|
-|km_game_bullet_t|bullet[MAX_NUM_BULLET]|
-|km_game_bang_t|bang[NUM_BANG]|
+|ar_game_archery_t|gun|
+|ar_game_arrow_t|bullet[MAX_NUM_ARROW]|
+|ar_game_bang_t|bang[NUM_BANG]|
 |ar_game_border_t|border|
 |ar_game_monster_t|monster[NUM_MONSTER]|
 
 **(*)** Các đối tượng có số lượng nhiều thì sẽ được khai báo dạng mảng.
 
 **Các biến quan trọng:**
-- **km_game_score:** Điểm của trò chơi.
-- **km_game_status:** Trạng thái trò chơi.
+- **ar_game_score:** Điểm của trò chơi.
+- **ar_game_status:** Trạng thái trò chơi.
   - GAME_OFF: Tắt.
   - GAME_ON: Bật.
   - GAME_OVER: Đã thua.
 
-- **km_game_setting_t** settingsetup : Cấu hình cấp độ của trò chơi.
+- **ar_game_setting_t** settingsetup : Cấu hình cấp độ của trò chơi.
   - settingsetup.silent : Bật/tắt chế độ im lặng.
-  - settingsetup.num_bullet : Cấu hình số lượng đạn.
-  - settingsetup.bullet_speed : Cấu hình tốc độ đạn
+  - settingsetup.num_arrow : Cấu hình số lượng đạn.
+  - settingsetup.arrow_speed : Cấu hình tốc độ đạn
   - settingsetup.monster_speed : Cấu hình tốc độ của quái vật.
 
 #### 2.2.2 Task
@@ -172,13 +173,13 @@ Trong lập trình event-driven, task là một yếu tố quan trọng giúp qu
 - **Tách biệt logic:** Task giúp tách biệt rõ ràng các phần logic xử lý sự kiện, điều này làm cho mã nguồn dễ hiểu và dễ bảo trì hơn. Mỗi task chỉ đảm nhận một nhóm công việc nhất định, giúp cho việc quản lý sự kiện trở nên trực quan, điều này giúp Source code rõ ràng, dễ đọc hơn.
 - **Phân cấp nhiệm vụ:** Các task trong hệ thống có thể được phân cấp theo mức độ ưu tiên, gọi là task level, giúp sắp xếp thứ tự xử lý các message trong hàng đợi một cách hợp lý. Nhờ đó, những công việc quan trọng sẽ được xử lý trước, trong khi các công việc ít quan trọng hơn sẽ được thực hiện sau. Trong game các task level của game đều là 4 và task nào được gọi trước sẽ được ưu tiên xử lý trước, đảm bảo trải nghiệm mượt mà.
 
-<p align="center"><img src="https://github.com/user-attachments/assets/939b7000-ab31-4746-90cb-9f9b2ba0a0ed" alt="kill monster tasks design" width="720"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/81b08014-93b5-48f4-8449-1af2d77b2eb4" alt="kill monster tasks design" width="720"/></p>
 <p align="center"><strong><em>Hình 6:</em></strong> Bảng Task của các đối tượng.</p>
 
 #### 2.2.3 Message & Signal
 **Message** được chia làm 2 loại chính, Message chỉ chứa Signal và Message vừa chứa Signal và Data. **Message** tương đương với **Signal**
 
-<p align="center"><img src="https://github.com/user-attachments/assets/75b82494-4e10-43cc-b1cd-ed2b64dbc4f0" alt="kill monster signals design" width="720"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/c66362df-9ba1-4d06-b3c9-cf2b9ecfacc1" alt="kill monster signals design" width="720"/></p>
 <p align="center"><strong><em>Hình 7:</em></strong> Bảng Signal của từng Task.</p>
 
 **(*)** Tác dụng của các Signal trong game: xem tại Ghi chú - Hình 5.
@@ -187,7 +188,7 @@ Trong lập trình event-driven, task là một yếu tố quan trọng giúp qu
 ### 3.1 Gun.
 **Sequence diagram:**
 
-<p align="center"><img src="https://github.com/user-attachments/assets/1d54969d-db5e-4a8e-94e1-7003adb6f2a2" width="640"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/c24adb44-dcf2-4822-b823-709def12564e" width="640"/></p>
 <p align="center"><strong><em>Hình 8:</em></strong> Gun sequence.</p>
 
 **Tóm tắt nguyên lý:** Gun sẽ nhận Signal thông được gửi từ 2 nguồn là Screen và Button. Quá trình xử lý của đối tượng phần làm 3 giai đoạn:
@@ -208,78 +209,78 @@ Trong code bạn có thể dùng macro để thay thế hàm void trong nhiều 
 
 Khai báo: Thư viện, struct và biến.
 
-    #include "km_game_gun.h"
+    #include "ar_game_archery.h"
 
-    km_game_gun_t gun;
-    static uint32_t gun_y = AXIS_Y_GUN;
+    ar_game_archery_t archery;
+    static uint32_t archery_y = AXIS_Y_ARCHERY;
 
-KM_GAME_GUN_SETUP() là một macro được dùng định nghĩa để cài đặt trạng thái ban đầu của trò chơi tiêu diệt quái vật. Nó đặt các giá trị của biến gun và sử dụng các hằng số được định nghĩa trước đó để thiết lập tọa độ, màu sắc và hình ảnh của súng.
+ar_GAME_ARCHERY_SETUP() là một macro được dùng định nghĩa để cài đặt trạng thái ban đầu của trò chơi tiêu diệt quái vật. Nó đặt các giá trị của biến gun và sử dụng các hằng số được định nghĩa trước đó để thiết lập tọa độ, màu sắc và hình ảnh của súng.
 
-    #define KM_GAME_GUN_SETUP() \
+    #define ar_GAME_ARCHERY_SETUP() \
     do { \
-        gun.x = AXIS_X_GUN; \
-        gun.y = AXIS_Y_GUN; \
-        gun.visible = WHITE; \
-        gun.action_image = 1; \
+        archery.x = AXIS_X_ARCHERY; \
+        archery.y = AXIS_Y_ar; \
+        archery.visible = WHITE; \
+        archery.action_image = 1; \
     } while (0);
 
-KM_GAME_GUN_UP() là một macro được sử dụng để di chuyển súng lên trên. Nó giảm giá trị của gun_y bằng một giá trị STEP_GUN_AXIS_Y và kiểm tra nếu giá trị mới bằng 0, nó được gán lại là 10.
+AR_GAME_ar_UP() là một macro được sử dụng để di chuyển súng lên trên. Nó giảm giá trị của archery_y bằng một giá trị STEP_ar_AXIS_Y và kiểm tra nếu giá trị mới bằng 0, nó được gán lại là 10.
 
-    #define KM_GAME_GUN_UP() \
+    #define AR_GAME_ar_UP() \
     do { \
-        gun_y -= STEP_GUN_AXIS_Y; \
-        if (gun_y == 0) {gun_y = 10;} \
+        archery_y -= STEP_ar_AXIS_Y; \
+        if (archery_y == 0) {archery_y = 10;} \
     } while(0);
 
-KM_GAME_GUN_DOWN() là một macro được sử dụng để di chuyển súng xuống dưới. Nó tăng giá trị của gun_y bằng một giá trị STEP_GUN_AXIS_Y và kiểm tra nếu giá trị mới vượt quá 50, nó được gán lại là 50.
+ar_GAME_ar_DOWN() là một macro được sử dụng để di chuyển súng xuống dưới. Nó tăng giá trị của archery_y bằng một giá trị STEP_ar_AXIS_Y và kiểm tra nếu giá trị mới vượt quá 50, nó được gán lại là 50.
 
-    #define KM_GAME_GUN_DOWN() \
+    #define ar_GAME_ar_DOWN() \
     do { \
-        gun_y += STEP_GUN_AXIS_Y; \
-        if (gun_y > 50) {gun_y = 50;} \
+        archery_y += STEP_ar_AXIS_Y; \
+        if (archery_y > 50) {archery_y = 50;} \
     } while(0);
 
-KM_GAME_GUN_RESET() là một macro được sử dụng để đặt lại trạng thái ban đầu của trò chơi tiêu diệt quái vật. Nó đặt lại giá trị của gun, gun_y và làm cho súng trở nên không hiển thị.
+AR_GAME_ar_RESET() là một macro được sử dụng để đặt lại trạng thái ban đầu của trò chơi tiêu diệt quái vật. Nó đặt lại giá trị của archery, archery_y và làm cho súng trở nên không hiển thị.
 
-    #define KM_GAME_GUN_RESET() \
+    #define AR_GAME_ar_RESET() \
     do { \
-        gun.x = AXIS_X_GUN; \
-        gun.y = AXIS_Y_GUN; \
-        gun.visible = BLACK; \
-        gun_y = AXIS_Y_GUN; \
+        archery.x = AXIS_X_ar; \
+        archery.y = AXIS_Y_ar; \
+        archery.visible = BLACK; \
+        archery_y = AXIS_Y_ar; \
     } while(0);
 
-Hàm km_game_gun_handle() là một hàm xử lý các thông điệp (messages) liên quan đến trò chơi cung bắn. Nó chứa một câu lệnh switch-case để xử lý các thông điệp khác nhau. Các thông điệp được gửi đến hàm này thông qua một tham số msg có kiểu dữ liệu ak_msg_t. Mỗi case trong switch-case xử lý một thông điệp cụ thể.
+Hàm ar_game_archery_handle() là một hàm xử lý các thông điệp (messages) liên quan đến trò chơi cung bắn. Nó chứa một câu lệnh switch-case để xử lý các thông điệp khác nhau. Các thông điệp được gửi đến hàm này thông qua một tham số msg có kiểu dữ liệu ak_msg_t. Mỗi case trong switch-case xử lý một thông điệp cụ thể.
 
-    void km_game_gun_handle(ak_msg_t* msg) {
+    void ar_game_archery_handle(ak_msg_t* msg) {
         switch (msg->sig) {
-        case KM_GAME_GUN_SETUP: {
-            APP_DBG_SIG("KM_GAME_GUN_SETUP\n");
-            KM_GAME_GUN_SETUP();
+        case AR_GAME_ar_SETUP: {
+            APP_DBG_SIG("AR_GAME_ar_SETUP\n");
+            AR_GAME_ar_SETUP();
         }
             break;
 
-        case KM_GAME_GUN_UPDATE: {
-            APP_DBG_SIG("KM_GAME_GUN_UPDATE\n");
-            gun.y = gun_y;
+        case AR_GAME_ar_UPDATE: {
+            APP_DBG_SIG("AR_GAME_ar_UPDATE\n");
+            archery.y = ar_y;
         }
             break;
 
-        case KM_GAME_GUN_UP: {
-            APP_DBG_SIG("KM_GAME_GUN_UP\n");
-            KM_GAME_GUN_UP();
+        case AR_GAME_ARCHERY_UP: {
+            APP_DBG_SIG("AR_GAME_ARCHERY_UP\n");
+            AR_GAME_ARCHERY_UP();
         }
             break;
 
-        case KM_GAME_GUN_DOWN: {
-            APP_DBG_SIG("KM_GAME_GUN_DOWN\n");
-            KM_GAME_GUN_DOWN();
+        case AR_GAME_ARCHERY_DOWN: {
+            APP_DBG_SIG("AR_GAME_ARCHERY_DOWN\n");
+            AR_GAME_ARCHERY_DOWN();
         }
             break;
 
-        case KM_GAME_GUN_RESET: {
-            APP_DBG_SIG("KM_GAME_GUN_RESET\n");
-            KM_GAME_GUN_RESET();
+        case AR_GAME_ARCHERY_RESET: {
+            APP_DBG_SIG("AR_GAME_ARCHERY_RESET\n");
+            AR_GAME_ARCHERY_RESET();
         }
             break;
 
@@ -292,9 +293,8 @@ Hàm km_game_gun_handle() là một hàm xử lý các thông điệp (messages)
 
 **Sequence diagram:**
 
-<p align="center"><img src="https://github.com/user-attachments/assets/bc100193-5003-47d0-a60a-5887c835a9aa" alt="bullet sequence" width="640"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/ef3686b0-a59f-4e75-ae14-420a5357ffc0" alt="bullet sequence" width="640"/></p>
 <p align="center"><strong><em>Hình 9:</em></strong> Bullet sequence.</p>
-
 
 **Tóm tắt nguyên lý:** Bullet sẽ nhận Signal thông được gửi từ 2 nguồn là Screen và Button. Quá trình xử lý của đối tượng phần làm 3 giai đoạn:
 - **Giai đoạn 1:** Bắt đầu game, cài đặt các thông số của Bullet. Tất cả Bullet vào trạng thái ẩn, không hiển thị trên màn hình.
@@ -309,7 +309,7 @@ Hàm km_game_gun_handle() là một hàm xử lý các thông điệp (messages)
 
 **Sequence diagram:**
 
-<p align="center"><img src="https://github.com/user-attachments/assets/5492c582-29dd-4551-84f7-1042d0c48aad" alt="bang sequence" width="640"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/4caa0f6c-85ab-4e45-9c1d-0ba4429fca3e" alt="bang sequence" width="640"/></p>
 <p align="center"><strong><em>Hình 10:</em></strong> Bang sequence.</p>
 
 **Tóm tắt nguyên lý:** Bang sẽ nhận Signal thông được gửi từ Screen. Quá trình xử lý của đối tượng phân làm 3 giai đoạn:
@@ -323,7 +323,7 @@ Hàm km_game_gun_handle() là một hàm xử lý các thông điệp (messages)
 
 **Sequence diagram:**
 
-<p align="center"><img src="https://github.com/user-attachments/assets/1dd2b59d-82ef-46d5-b568-bca398446a2e" alt="border sequence" width="640"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/00231537-dbbb-4ee3-93dd-b7ab88ebbba1" alt="border sequence" width="640"/></p>
 <p align="center"><strong><em>Hình 11:</em></strong> Border sequence.</p>
 
 **Tóm tắt nguyên lý:** Border là 1 đối tượng bất động trong game. Có nhiệm vụ update level khi đến mốc điểm quy định và kiểm tra game over.
@@ -339,7 +339,7 @@ Hàm km_game_gun_handle() là một hàm xử lý các thông điệp (messages)
 
 **Sequence diagram:**
 
-<p align="center"><img src="https://github.com/user-attachments/assets/67820abd-200f-4592-8143-e6dabc86323d" alt="monster sequence" width="640"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/9f204c40-f40f-4081-bbfc-3737fa821e37" alt="monster sequence" width="640"/></p>
 <p align="center"><strong><em>Hình 12:</em></strong> Monster sequence.</p>
 
 **Tóm tắt nguyên lý:** Monster là đối tượng xuất hiện và di chuyển liên tục trong game nhận signal từ Screen. Chia làm 3 giai đoạn:
@@ -368,7 +368,3 @@ Trong trò chơi, màn hình hiện thị là 1 màn hình **LCD OLed 1.3"** có
 **Animation** là ứng dụng việc nối ảnh của của nhiều ảnh liên tiếp tạo thành hoạt ảnh cho đổi tượng muốn miêu tả. Trong game, biến “action_image” trong đối tượng được sử dụng nối các ảnh theo thứ tự tạo thành animation.
 
 **Ghi chú:** Trong thiết kế trên có nhiều ảnh khác nhau cho cùng 1 đối tượng để tạo animation cho đối tượng đó nhằm tăng tính chân thật lúc chơi game.
-
-#### 4.1.2 Code
-
-**Archer display:**
